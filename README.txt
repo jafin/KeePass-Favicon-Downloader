@@ -1,6 +1,17 @@
 KeePass Favicon Downloader plugin
 =================================
 
+Version 1.7.0 JF changes
+----------------------
+- attempted to get downloader working async, works on my machine but I'm not much of a desktop app dev.
+
+Issues
+----------------------
+- Cancel button is a bit laggy.
+- Probably requires you to have .NET40 installed.
+
+
+
 Version 1.7.0 changes
 ---------------------
 - Entries with URLs stored in the title instead of URL field can now be processed

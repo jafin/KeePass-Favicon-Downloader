@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>this.Log-NLog</id>
+    <version>0.0.3.0</version>
+    <title>this.Log Logging Extension (NLog Plugin)</title>
+    <authors>RealDimensions Software,  LLC</authors>
+    <owners>RealDimensions Software,  LLC</owners>
+    <licenseUrl>https://raw.github.com/ferventcoder/this.Log/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ferventcoder/this.Log</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>this.Log-NLog is the NLog plugin to this.Log logging extension.</description>
+    <summary>this.Log-NLog - this.Log logging extension using NLog</summary>
+    <releaseNotes>== v0.0.3 ==
+      Strong named the assembly - https://github.com/ferventcoder/this.Log/pull/6
+      Error and Fatal can now have Exceptions passed to them (only the Func&lt;string&gt; versions though) - https://github.com/ferventcoder/this.Log/commit/4a468d2836312184597981e5e91a98909e23f1f8</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <tags>logging log this.Log nlog</tags>
+    <dependencies>
+      <dependency id="this.Log" version="0.0.3.0" />
+      <dependency id="NLog" version="2.0.0.2000" />
+    </dependencies>
+    <references>
+      <reference file="this.Log-NLog.dll" />
+    </references>
+  </metadata>
+</package>

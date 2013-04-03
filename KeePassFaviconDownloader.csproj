@@ -18,7 +18,9 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,27 +42,49 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\HtmlAgilityPack.dll</HintPath>
+      <HintPath>packages\HtmlAgilityPack.1.4.6\lib\Net40-client\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="KeePass, Version=2.1.2.16375, Culture=neutral, PublicKeyToken=fed2ed7716aecf5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.0.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\NLog.2.0.1.2\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="this.Log">
+      <HintPath>packages\this.Log.0.0.3.0\lib\net40\this.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="this.Log-NLog, Version=0.0.3.0, Culture=neutral, PublicKeyToken=cbf7544467682e94, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\this.Log-NLog.0.0.3.0\lib\net40\this.Log-NLog.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
+    <Compile Include="DownloadHelper.cs" />
+    <Compile Include="DownloadResponse.cs" />
+    <Compile Include="HostManager.cs" />
     <Compile Include="KeePassFaviconDownloaderExt.cs" />
+    <Compile Include="LogExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.txt" />
     <Content Include="versionInfo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -91,6 +115,9 @@ echo Release plgx deleted
 REM copy output DLLs to KeePass plugins directory
 copy "$(ProjectName).dll" "%25KPPDir%25\$(ProjectName).dll"
 copy "HtmlAgilityPack.dll" "%25KPPDir%25\HtmlAgilityPack.dll"
+copy "this.log.dll" "%25KPPDir%25\this.log.dll"
+copy "this.log-nlog.dll" "%25KPPDir%25\this.log-nlog.dll"
+copy "nlog.dll" "%25KPPDir%25\nlog.dll"
 if errorlevel 1 goto BuildEventFailed
 echo Debug DLLs copied to plugins directory
 
@@ -103,6 +130,7 @@ REM In release mode we want to make sure that we are working with the PLGX versi
 REM delete the DLLs from any previous Debug build
 del /Q "%25KPPDir%25$(ProjectName).dll"
 del /Q "%25KPPDir%25HtmlAgilityPack.dll"
+del /Q "%25KPPDir%25this.log.dll"
 REM if errorlevel 1 goto BuildEventFailed
 echo Debug DLLs deleted
 
@@ -116,8 +144,24 @@ REM copy relevant project files to temporary directory
 REM (for simple KeePass plugins you may need to
 REM copy only *.cs files and .csproj file)
 copy "$(ProjectDir)*.cs" "%25KPPTempDir%25"
-copy "$(ProjectDir)HtmlAgilityPack.dll" "%25KPPTempDir%25\HtmlAgilityPack.dll"
 if errorlevel 1 goto BuildEventFailed
+
+mkdir "%25KPPTempDir%25\packages\HtmlAgilityPack.1.4.6\lib\Net40-client"
+copy "$(ProjectDir)packages\HtmlAgilityPack.1.4.6\lib\Net40-client\HtmlAgilityPack.dll" "%25KPPTempDir%25\packages\HtmlAgilityPack.1.4.6\lib\Net40-client\HtmlAgilityPack.dll"
+if errorlevel 1 goto BuildEventFailed
+
+mkdir "%25KPPTempDir%25\packages\this.Log.0.0.3.0\lib\net40"
+copy "$(ProjectDir)packages\this.Log.0.0.3.0\lib\net40\this.log.dll" "%25KPPTempDir%25\packages\this.Log.0.0.3.0\lib\net40\this.log.dll"
+if errorlevel 1 goto BuildEventFailed
+
+mkdir "%25KPPTempDir%25\packages\this.Log-NLog.0.0.3.0\lib\net40"
+copy "$(ProjectDir)packages\this.Log-NLog.0.0.3.0\lib\net40\this.log-nlog.dll" "%25KPPTempDir%25\packages\this.Log-NLog.0.0.3.0\lib\net40\this.log-nlog.dll"
+if errorlevel 1 goto BuildEventFailed
+
+mkdir "%25KPPTempDir%25\packages\NLog.2.0.1.2\lib\net40"
+copy "$(ProjectDir)packages\NLog.2.0.1.2\lib\net40\nlog.dll" "%25KPPTempDir%25\packages\NLog.2.0.1.2\lib\net40\nlog.dll"
+if errorlevel 1 goto BuildEventFailed
+
 copy "$(ProjectDir)$(ProjectName).csproj" "%25KPPTempDir%25\$(ProjectName).csproj"
 if errorlevel 1 goto BuildEventFailed
 mkdir "%25KPPTempDir%25\Properties"
@@ -126,12 +170,12 @@ if errorlevel 1 goto BuildEventFailed
 echo Files copied to temporary directory
 
 REM create the PLGX
-"%25KPDir%25KeePass.exe" --plgx-create "%25KPPTempDir%25"
+"%25KPDir%25KeePass.exe" --plgx-create "%25KPPTempDir%25" --plgx-prereq-net:4.0
 if errorlevel 1 goto BuildEventFailed
 echo PLGX created
 
 REM delete the temporary directory and its contents
-rmdir /S /Q "%25KPPTempDir%25"
+REM rmdir /S /Q "%25KPPTempDir%25"
 if errorlevel 1 goto BuildEventFailed
 echo Temporary directory deleted
 

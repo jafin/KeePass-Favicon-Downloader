@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>this.Log</id>
+    <version>0.0.3.0</version>
+    <title>this.Log Logging Extension</title>
+    <authors>RealDimensions Software,  LLC</authors>
+    <owners>RealDimensions Software,  LLC</owners>
+    <licenseUrl>https://raw.github.com/ferventcoder/this.Log/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ferventcoder/this.Log</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>this.Log is a Logging Extension that works in all code locations.
+This package by itself only brings the logging extension and allows you to call this.Log().Debug, etc. 
+What it doesn't bring though is a logging facility. Please search nuget for this.Log to see the facilities.</description>
+    <summary>this.Log - Logging Extensions that work in all code locations</summary>
+    <releaseNotes>== v0.0.3 ==
+      Strong named the assembly - https://github.com/ferventcoder/this.Log/pull/6
+      Error and Fatal can now have Exceptions passed to them (only the Func&lt;string&gt; versions though) - https://github.com/ferventcoder/this.Log/commit/4a468d2836312184597981e5e91a98909e23f1f8</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <tags>logging log this.Log</tags>
+    <references>
+      <reference file="this.Log.dll" />
+    </references>
+  </metadata>
+</package>
